@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User</title>
+</head>
+<body>
+<h1>User Page</h1>
+<div>
+    <p class="card-text" th:text="${user.name}"></p>
+</div>
+<div>
+    <p class="card-text" th:text="${user.email}"></p>
+</div>
+<div th:if="${user.id != null}">
+    <a th:href="@{|/users/edit/${user.id}/|}">Edit user</a>
+    <br/>
+    <form th:method="DELETE" th:action="@{|/users/delete/${user.id}|}">
+        <input type="submit" value="Delete user"/>
+    </form>
+</div>
+<hr>
+<div th:if="${user.account != null}">
+    <div>
+        <b>Prepaid money:</b>
+        <span class="card-text" th:text="${user.account.money}"></span>
+    </div>
+</div>
+<hr>
+<label>Tickets:</label>
+<form th:method="GET" th:action="@{|/tickets/byUser/${user.id}/params|}">
+    <input type="hidden" th:name="pageSize" value="2"/>
+    <input type="hidden" th:name="pageNum" value="5"/>
+    <input type="submit" value="Booked tickets"/>
+</form>
+
+<div th:if="${user.id == null}">
+    NOT FOUND
+    <a th:href="/users/"></a>
+</div>
+</body>
+</html>

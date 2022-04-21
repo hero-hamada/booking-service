@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Users Page</h1>
+<button>
+    <a th:href="@{~/users/add}">Add User</a>
+</button>
+<br/>
+<form th:method="GET" th:action="@{/users/search/items}">
+    <label>Search by email:</label>
+    <input type="text" th:name="email"/>
+    <input type="submit" value="Search"/>
+</form>
+<form th:method="GET" th:action="@{/users/search/items}">
+    <label>Search by name:</label>
+    <input type="text" th:name="name"/>
+    <input type="hidden" th:name="pageSize" value="2"/>
+    <input type="hidden" th:name="pageNum" value="5"/>
+    <input type="submit" value="Search"/>
+</form>
+<div th:if="${users != null}">
+    <div th:each="user : ${users}">
+        <p class="card-text" th:text="${user.name}"></p>
+        <p class="card-text" th:text="${user.email}"></p>
+    </div>
+</div>
+<br/>
+</body>
+</html>

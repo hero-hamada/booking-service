@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+</head>
+<body>
+    <div>
+        <form th:method="POST" th:action="@{/events/}">
+            <label>Title: </label>
+            <input type="text" name="title"/>
+            <label>Date: </label>
+            <input type="date" name="date"/>
+            <label>Ticket Price: </label>
+            <input type="number" name="ticketPrice"/>
+            <input type="submit" value="Save"/>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Event</title>
+    </head>
+    <body>
+        <h1>Events Page</h1>
+        <button>
+            <a th:href="@{~/events/add}">Add Event</a>
+        </button>
+        <br/>
+        <form th:method="GET" th:action="@{/events/search/date}">
+            <label>Search by day:</label>
+            <input type="date" th:name="day"/>
+            <input type="hidden" th:name="pageSize" value="2"/>
+            <input type="hidden" th:name="pageNum" value="5"/>
+            <input type="submit" value="Search"/>
+        </form>
+        <br/>
+        <form th:method="GET" th:action="@{/events/search/}">
+            <label>Search by title:</label>
+            <input type="text" th:name="title"/>
+            <input type="hidden" th:name="pageSize" value="2"/>
+            <input type="hidden" th:name="pageNum" value="5"/>
+            <input type="submit" value="Search"/>
+        </form>
+        <div th:if="${events != null}">
+            <div th:each="event : ${events}">
+                <p th:text="${event.title}"></p>
+                <p th:text="${event.date}"></p>
+            </div>
+        </div>
+        <br/>
+    </body>
+</html>

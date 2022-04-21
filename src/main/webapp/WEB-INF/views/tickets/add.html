@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User</title>
+</head>
+<body>
+    <div>
+        <form th:method="POST" th:action="@{/tickets/}">
+            <label>User id: </label>
+            <input type="number" name="userId"/>
+            <br/>
+            <label>Event id: </label>
+            <input type="number" name="eventId"/>
+            <br/>
+            <label>Place: </label>
+            <input type="number" name="place"/>
+            <br/>
+            <label>Category: </label>
+            <select name="category">
+                <option th:each="category : ${categories}" th:value="${category}" th:text="${category}"
+                        th:selected="${category==category.STANDARD}"></option>
+            </select>
+            <hr/>
+            <input type="submit" value="Save"/>
+        </form>
+    </div>
+</body>
+</html>

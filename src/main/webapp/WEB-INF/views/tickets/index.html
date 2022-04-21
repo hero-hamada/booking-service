@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Ticket</title>
+    </head>
+    <body>
+        <h1>Tickets Page</h1>
+        <button>
+            <a th:href="@{~/tickets/add}">Add Ticket</a>
+        </button>
+        <br/>
+        <div th:if="${tickets != null}">
+            <div th:each="ticket : ${tickets}">
+                <b>Event ID:</b><span th:text="${ticket.eventId}"></span><br>
+                <b>User ID:</b><span th:text="${ticket.userId}"></span><br>
+                <b>Category:</b><span th:text="${ticket.category}"></span><br>
+                <b>Place:</b><span th:text="${ticket.place}"></span><br>
+
+                <form th:method="DELETE" th:action="@{|/tickets/delete/${ticket.id}|}">
+                    <input type="submit" value="Cancel ticket"/>
+                </form>
+                <hr>
+            </div>
+        </div>
+        <br/>
+    </body>
+</html>

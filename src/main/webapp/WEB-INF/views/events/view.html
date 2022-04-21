@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Event</title>
+</head>
+<body>
+<h1>Event Page</h1>
+<div th:if="${event.id != null}">
+    <div>
+        <b>Title:</b>
+        <span class="card-text" th:text="${event.title}"></span>
+    </div>
+    <div>
+        <b>Date:</b>
+        <span class="card-text" th:text="${event.date}"></span>
+    </div>
+    <br>
+    <div th:if="${event.id != null}">
+        <button>
+            <a th:href="@{|/events/edit/${event.id}/|}">Edit</a>
+        </button>
+        <br>
+        <form th:method="DELETE" th:action="@{|/events/delete/${event.id}|}">
+            <input type="submit" value="Delete"/>
+        </form>
+    </div>
+    <hr>
+    <label>Tickets:</label>
+    <form th:method="GET" th:action="@{|/tickets/byEvent/${event.id}/params|}">
+        <input type="hidden" th:name="pageSize" value="2"/>
+        <input type="hidden" th:name="pageNum" value="5"/>
+        <input type="submit" value="Booked tickets"/>
+    </form>
+</div>
+<div th:if="${event.id == null}">
+    NOT FOUND
+    <a th:href="/events/"></a>
+</div>
+</body>
+</html>

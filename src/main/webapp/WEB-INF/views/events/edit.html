@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Add User</title>
+    </head>
+    <body>
+        <div>
+            <form th:method="PATCH" th:action="@{/events/{id}(id=${event.id})}" th:object="${event}">
+                <input type="hidden" th:field="*{id}" th:value="*{id}">
+                <label>Title: </label>
+                <input type="text" th:field="*{title}" th:value="*{title}"/>
+                <label>Date: </label>
+                <input type="text" th:field="*{date}" th:value="*{date}"/>
+                <label>Ticket price: </label>
+                <input type="text" th:field="*{ticketPrice}" th:value="*{ticketPrice}"/>
+                <input type="submit" value="Save"/>
+            </form>
+        </div>
+    </body>
+</html>
