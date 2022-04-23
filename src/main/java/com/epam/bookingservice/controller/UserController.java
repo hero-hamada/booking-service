@@ -5,7 +5,6 @@ import com.epam.bookingservice.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,9 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/users")
+import java.util.List;
+
+@RestController
+@RequestMapping("bookingservice/v1//users")
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
@@ -30,50 +32,36 @@ public class UserController {
         this.bookingFacade = bookingFacade;
     }
 
-    @GetMapping()
-    public String getUsers() {
-        LOGGER.info("GET Users");
-        return "/users/index";
-    }
-
     @GetMapping("/{id}")
-    public String getById(Model model, @PathVariable("id") Long id) {
+    public User getById(@PathVariable("id") Long id) {
         User userById = bookingFacade.getUserById(id);
-        model.addAttribute("user", userById);
         LOGGER.info("GET User by id: {}");
-        return "/users/view";
+        return userById;
     }
 
-    @GetMapping("/search/items")
-    public String getByEmail(Model model, @RequestParam(name = "email") String email) {
-        model.addAttribute("user", bookingFacade.getUserByEmail(email));
+    @GetMapping(params = {"email"})
+    public User getByEmail(@RequestParam(name = "email") String email) {
         LOGGER.info("GET User by email: {}", email);
-        return "/users/view";
+        return bookingFacade.getUserByEmail(email);
     }
 
-    @GetMapping("/search")
-    public String getUsersByName(Model model, @RequestParam(name = "name") String name,
-                                      @RequestParam("pageSize") int pageSize,
-                                      @RequestParam("pageNum") int pageNum) {
-        model.addAttribute("users", bookingFacade.getUsersByName(name, pageSize, pageNum));
+    @GetMapping(params = {"name", "pageSize", "pageNum"})
+    public List<User> getUsersByName(Model model, @RequestParam(name = "name") String name,
+                                     @RequestParam("pageSize") int pageSize,
+                                     @RequestParam("pageNum") int pageNum) {
         LOGGER.info("GET Users by name: {}", name);
-        return "/users/index";
-    }
-
-    @GetMapping("/add")
-    public String addUser(@ModelAttribute("user") User user) {
-    return "users/add";
+        return bookingFacade.getUsersByName(name, pageSize, pageNum);
     }
 
     @PostMapping()
-    public String createUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
+    public User createUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-
-            return "users/add";
+            LOGGER.info("BindingResult has errors");
+            return new User();
         }
         User newUser = bookingFacade.createUser(user);
         LOGGER.info("CREATE User: " + newUser);
-        return "redirect:/users/";
+        return newUser;
     }
 
     @GetMapping("/edit/{id}")
@@ -83,21 +71,21 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public String updateUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
+    public User updateUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "users/edit";
+            return new User();
         }
         bookingFacade.updateUser(user);
         LOGGER.info("UPDATE User : {}", user);
-        return "redirect:/users/";
+        return bookingFacade.updateUser(user);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String deleteById(@PathVariable("id") Long id) {
+    public boolean deleteById(@PathVariable("id") Long id) {
         boolean isDeletedSuccess = bookingFacade.deleteUser(id);
         if (isDeletedSuccess) {
             LOGGER.info("DELETE User with id: {}", id);
         }
-        return "redirect:/users";
+        return isDeletedSuccess;
     }
 }

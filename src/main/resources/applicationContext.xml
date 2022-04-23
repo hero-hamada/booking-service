@@ -9,25 +9,25 @@
 
     <context:annotation-config/>
 
-    <bean id="dataStorage"
-          class="com.epam.bookingservice.dao.storage.DataStorage">
-    </bean>
+<!--    <bean id="dataStorage"-->
+<!--          class="com.epam.bookingservice.dao.storage.DataStorage">-->
+<!--    </bean>-->
 
-    <bean id="userDAO"
-          class="com.epam.bookingservice.dao.impl.UserDAOImpl">
-    </bean>
+<!--    <bean id="userDAO"-->
+<!--          class="com.epam.bookingservice.dao.impl.UserDAOImpl">-->
+<!--    </bean>-->
 
-    <bean id="ticketDAO"
-          class="com.epam.bookingservice.dao.impl.TicketDAOImpl">
-    </bean>
+<!--    <bean id="ticketDAO"-->
+<!--          class="com.epam.bookingservice.dao.impl.TicketDAOImpl">-->
+<!--    </bean>-->
 
-    <bean id="userService"
-          class="com.epam.bookingservice.service.impl.UserServiceImpl">
-    </bean>
+<!--    <bean id="userService"-->
+<!--          class="com.epam.bookingservice.service.impl.UserServiceImpl">-->
+<!--    </bean>-->
 
-    <bean id="ticketService"
-          class="com.epam.bookingservice.service.impl.TicketServiceImpl">
-    </bean>
+<!--    <bean id="ticketService"-->
+<!--          class="com.epam.bookingservice.service.impl.TicketServiceImpl">-->
+<!--    </bean>-->
 
 <!--    <bean id="eventService"-->
 <!--          class="com.epam.bookingservice.service.impl.EventServiceImpl">-->

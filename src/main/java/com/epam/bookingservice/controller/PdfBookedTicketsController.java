@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/tickets")
+@RestController
+@RequestMapping("bookingservice/v1/tickets")
 public class PdfBookedTicketsController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
@@ -22,12 +24,11 @@ public class PdfBookedTicketsController {
     }
 
     @GetMapping("/accept=application/pdf")
-    public String getBookedTickets(@RequestParam("userId") Long userId,
+    public void getBookedTickets(@RequestParam("userId") Long userId,
                                    @RequestParam("pageSize") int pageSize,
                                    @RequestParam("pageNum") int pageNum) {
         User user = bookingFacade.getUserById(userId);
         BookedTicketsPdfBuilder.build(bookingFacade.getBookedTickets(user, pageSize, pageNum));
         LOGGER.info("GET PDF Booked tickets by User: {}", user);
-        return "/events/index";
     }
 }

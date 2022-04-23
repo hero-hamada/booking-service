@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import static com.epam.bookingservice.model.Ticket.Category.STANDARD;
 import static java.util.Calendar.MAY;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;

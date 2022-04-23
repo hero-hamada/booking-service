@@ -1,6 +1,5 @@
 package com.epam.bookingservice.dao.impl;
 
-import com.epam.bookingservice.config.SpringConfig;
 import com.epam.bookingservice.dao.EventDAO;
 import com.epam.bookingservice.dao.TicketDAO;
 import com.epam.bookingservice.dao.UserDAO;
@@ -12,12 +11,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,9 +23,10 @@ import static com.epam.bookingservice.model.Ticket.Category.STANDARD;
 import static java.util.Calendar.MAY;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {SpringConfig.class})
-@WebAppConfiguration()
+@SpringBootTest
+//@ExtendWith(SpringExtension.class)
+//@ContextConfiguration(classes = {SpringConfig.class})
+//@WebAppConfiguration()
 @ExtendWith(MockitoExtension.class)
 class TicketDAOTest {
 
