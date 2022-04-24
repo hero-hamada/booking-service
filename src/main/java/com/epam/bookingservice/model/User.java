@@ -23,12 +23,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user", schema = "public")
+@Table(name = "`user`", schema = "public")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+
     private Long id;
     @NonNull
     private String name;
@@ -37,9 +38,6 @@ public class User {
     @OneToOne(mappedBy="user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id", referencedColumnName = "user_id")
     private UserAccount account;
-//    @OneToMany(mappedBy="user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "id", referencedColumnName = "user_id")
-//    private List<Ticket> tickets;
 
     public User(String name, String email, UserAccount userAccount) {
         this.name = name;

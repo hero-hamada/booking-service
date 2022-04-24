@@ -4,11 +4,11 @@ import com.epam.bookingservice.dao.EventDAO;
 import com.epam.bookingservice.model.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,8 +17,9 @@ import java.util.List;
 import static java.util.Calendar.MAY;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
+@DataJpaTest
 @ExtendWith(MockitoExtension.class)
-class EventDAOIntegrationTest {
+class EventDAOTest {
 
     @Autowired
     private EventDAO underTest;
@@ -57,10 +58,9 @@ class EventDAOIntegrationTest {
     }
 
     @Test
-    @Disabled
     void canFindEventsForDay() {
         // given
-        final LocalDate day = LocalDate.of(2022, MAY, 15);
+        final LocalDate day = LocalDate.of(2022, MAY, 10);
 
         // when
         List<Event> actualEvents = underTest.findByDay(day);

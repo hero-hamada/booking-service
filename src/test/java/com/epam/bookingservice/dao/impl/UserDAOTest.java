@@ -2,35 +2,37 @@ package com.epam.bookingservice.dao.impl;
 
 import com.epam.bookingservice.dao.UserDAO;
 import com.epam.bookingservice.model.User;
+import com.epam.bookingservice.model.UserAccount;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = {SpringConfig.class})
-//@WebAppConfiguration()
+@DataJpaTest
 @ExtendWith(MockitoExtension.class)
+@AutoConfigureTestDatabase
 public class UserDAOTest {
 
     @Autowired
     private UserDAO underTest;
+    private User expectedUser;
 
     @BeforeEach
     public void setUp() {
         underTest.deleteAll();
+        User user = new User();
+        user.setName("User");
+        user.setEmail("user@mail.com");
+        expectedUser = underTest.save(user);
     }
 
     @AfterEach
@@ -40,15 +42,10 @@ public class UserDAOTest {
 
     @Test
     public void canFindUserByEmail() {
-        // given
-        User expectedUser = new User();
-        expectedUser.setName("Rem");
-        expectedUser.setEmail("rem@gmail.com");
-        underTest.save(expectedUser);
-
+        //given
+        final String email = "user@mail.com";
         // when
-        final User actualUser = underTest.findByEmail(expectedUser.getEmail());
-
+        final User actualUser = underTest.findByEmail(email);
         // then
         assertThat(actualUser).isEqualTo(expectedUser);
     }

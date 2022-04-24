@@ -1,19 +1,11 @@
 //package com.epam.bookingservice.config;
 //
-//import com.epam.bookingservice.util.RestResponseStatusExceptionResolver;
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.ApplicationContext;
+//import org.springframework.boot.autoconfigure.domain.EntityScan;
 //import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.ComponentScan;
 //import org.springframework.context.annotation.Configuration;
 //import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-//import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-//import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
+//import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 //import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-//import org.thymeleaf.spring5.SpringTemplateEngine;
-//import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-//import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 //
 ///**
 // * Core Java-based Spring configuration class.
@@ -27,7 +19,17 @@
 ////@EnableWebMvc
 ////@EnableJpaRepositories(basePackages="com.epam.bookingservice.dao", entityManagerFactoryRef="sessionFactory")
 ////@ImportResource("classpath:applicationContext.xml")
+//@EnableJpaRepositories(basePackages="com.epam.bookingservice.dao")
+//@EntityScan
 //public class SpringConfig implements WebMvcConfigurer {
+//
+//    @Bean(name="entityManagerFactory")
+//    public LocalSessionFactoryBean sessionFactory() {
+//        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+//
+//        return sessionFactory;
+//    }
+//
 ////
 ////    private final ApplicationContext applicationContext;
 ////

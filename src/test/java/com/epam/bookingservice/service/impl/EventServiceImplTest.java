@@ -17,7 +17,6 @@ import java.util.Optional;
 import static java.time.Month.AUGUST;
 import static java.util.Calendar.MAY;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.assertj.core.api.BDDAssumptions.given;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.never;

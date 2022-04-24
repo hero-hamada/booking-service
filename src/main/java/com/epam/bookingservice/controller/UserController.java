@@ -5,22 +5,22 @@ import com.epam.bookingservice.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("bookingservice/v1//users")
+@RequestMapping("bookingservice/v1/users")
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
@@ -40,13 +40,13 @@ public class UserController {
     }
 
     @GetMapping(params = {"email"})
-    public User getByEmail(@RequestParam(name = "email") String email) {
+    public User getByEmail(@RequestParam("email") String email) {
         LOGGER.info("GET User by email: {}", email);
         return bookingFacade.getUserByEmail(email);
     }
 
     @GetMapping(params = {"name", "pageSize", "pageNum"})
-    public List<User> getUsersByName(Model model, @RequestParam(name = "name") String name,
+    public List<User> getUsersByName(@RequestParam("name") String name,
                                      @RequestParam("pageSize") int pageSize,
                                      @RequestParam("pageNum") int pageNum) {
         LOGGER.info("GET Users by name: {}", name);
@@ -54,38 +54,22 @@ public class UserController {
     }
 
     @PostMapping()
-    public User createUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            LOGGER.info("BindingResult has errors");
-            return new User();
-        }
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createUser(@RequestBody User user) {
         User newUser = bookingFacade.createUser(user);
         LOGGER.info("CREATE User: " + newUser);
         return newUser;
     }
 
-    @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", bookingFacade.getUserById(id));
-        return "users/edit";
-    }
-
-    @PatchMapping("/{id}")
-    public User updateUser(@ModelAttribute("user") User user, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new User();
-        }
-        bookingFacade.updateUser(user);
+    @PutMapping("/{id}")
+    public User updateUser(@RequestBody User user) {
         LOGGER.info("UPDATE User : {}", user);
         return bookingFacade.updateUser(user);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public boolean deleteById(@PathVariable("id") Long id) {
-        boolean isDeletedSuccess = bookingFacade.deleteUser(id);
-        if (isDeletedSuccess) {
-            LOGGER.info("DELETE User with id: {}", id);
-        }
-        return isDeletedSuccess;
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable("id") Long id) {
+        bookingFacade.deleteUser(id);
+        LOGGER.info("DELETE User with id: {}", id);
     }
 }

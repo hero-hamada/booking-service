@@ -2,6 +2,7 @@ package com.epam.bookingservice.dao.impl;
 
 import com.epam.bookingservice.dao.EventDAO;
 import com.epam.bookingservice.dao.TicketDAO;
+import com.epam.bookingservice.dao.UserAccountDAO;
 import com.epam.bookingservice.dao.UserDAO;
 import com.epam.bookingservice.model.Event;
 import com.epam.bookingservice.model.Ticket;
@@ -13,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,10 +24,7 @@ import static com.epam.bookingservice.model.Ticket.Category.STANDARD;
 import static java.util.Calendar.MAY;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration(classes = {SpringConfig.class})
-//@WebAppConfiguration()
+@DataJpaTest
 @ExtendWith(MockitoExtension.class)
 class TicketDAOTest {
 
@@ -36,6 +34,9 @@ class TicketDAOTest {
     private UserDAO userDAO;
     @Autowired
     private EventDAO eventDAO;
+    @Autowired
+    private UserAccountDAO userAccountDAO;
+
     private List<Ticket> expectedTickets;
     private User savedUser;
     private Event savedEvent;
@@ -53,14 +54,14 @@ class TicketDAOTest {
         userAccount.setMoney(BigDecimal.valueOf(5000));
         user.setAccount(userAccount);
         savedUser = userDAO.save(user);
-
         final Event event = new Event();
         event.setTitle("Event");
         event.setDate(LocalDate.of(2022, MAY, 30));
         event.setTicketPrice(BigDecimal.valueOf(1000));
         savedEvent = eventDAO.save(event);
+        userAccountDAO.save(userAccount);
 
-        expectedTickets = (List<Ticket>) underTest.saveAll(List.of(
+        expectedTickets = underTest.saveAll(List.of(
                 new Ticket(savedEvent.getId(), savedUser.getId(), 1, STANDARD),
                 new Ticket(savedEvent.getId(), savedUser.getId(), 5, STANDARD)
         ));
@@ -68,7 +69,7 @@ class TicketDAOTest {
 
     @AfterEach
     void tearDown() {
-        underTest.deleteAll();
+//        underTest.deleteAll();
     }
 
     @Test

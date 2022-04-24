@@ -6,18 +6,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -34,7 +34,7 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    public Event  getById(@PathVariable("id") Long id) {
+    public Event getById(@PathVariable("id") Long id) {
         LOGGER.info("GET Event by id: {}", id);
         return bookingFacade.getEventById(id);
     }
@@ -57,33 +57,22 @@ public class EventController {
     }
 
     @PostMapping()
-    public Event createEvent(@RequestParam("title") String title,
-                             @RequestParam("date")
-                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                             @RequestParam("ticketPrice") BigDecimal ticketPrice) {
-        Event event = new Event();
-        event.setTitle(title);
-        event.setDate(date);
-        event.setTicketPrice(ticketPrice);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Event createEvent(@RequestBody Event event) {
         Event newEvent = bookingFacade.createEvent(event);
         LOGGER.info("CREATE Event: " + newEvent);
         return newEvent;
     }
 
     @PutMapping("/{id}")
-    public Event updateEvent(@ModelAttribute("event") Event event, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            LOGGER.error("BindingResult has errors");
-            return new Event();
-        }
+    public Event updateEvent(@RequestBody Event event) {
         LOGGER.info("UPDATE Event: {}", event);
         return bookingFacade.updateEvent(event);
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteById(@PathVariable("id") Long id) {
-
+    public void deleteById(@PathVariable("id") Long id) {
+        bookingFacade.deleteEvent(id);
         LOGGER.info("DELETE Event with id: {}", id);
-        return bookingFacade.deleteEvent(id);
     }
 }
