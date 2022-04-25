@@ -1,6 +1,6 @@
-package com.epam.bookingservice.dao.impl;
+package com.epam.bookingservice.data.impl;
 
-import com.epam.bookingservice.dao.EventDAO;
+import com.epam.bookingservice.data.EventRepository;
 import com.epam.bookingservice.model.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,10 +19,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
-class EventDAOTest {
+class EventRepositoryTest {
 
     @Autowired
-    private EventDAO underTest;
+    private EventRepository underTest;
     private List<Event> expectedEvents;
 
     @BeforeEach

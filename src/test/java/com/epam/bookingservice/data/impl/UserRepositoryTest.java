@@ -1,8 +1,7 @@
-package com.epam.bookingservice.dao.impl;
+package com.epam.bookingservice.data.impl;
 
-import com.epam.bookingservice.dao.UserDAO;
+import com.epam.bookingservice.data.UserRepository;
 import com.epam.bookingservice.model.User;
-import com.epam.bookingservice.model.UserAccount;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +19,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureTestDatabase
-public class UserDAOTest {
+public class UserRepositoryTest {
 
     @Autowired
-    private UserDAO underTest;
+    private UserRepository underTest;
     private User expectedUser;
 
     @BeforeEach

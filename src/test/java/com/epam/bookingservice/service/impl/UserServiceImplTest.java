@@ -1,6 +1,6 @@
 package com.epam.bookingservice.service.impl;
 
-import com.epam.bookingservice.dao.UserDAO;
+import com.epam.bookingservice.data.UserRepository;
 import com.epam.bookingservice.model.User;
 import com.epam.bookingservice.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,12 +24,12 @@ import static org.mockito.Mockito.verify;
 class UserServiceImplTest {
 
     @Mock
-    private UserDAO userDAO;
+    private UserRepository userRepository;
     private UserService underTest;
 
     @BeforeEach
     public void setUp() {
-        underTest = new UserServiceImpl(userDAO);
+        underTest = new UserServiceImpl(userRepository);
     }
 
     @Test
@@ -39,11 +39,11 @@ class UserServiceImplTest {
         user.setId(1L);
         user.setName("Rem");
         user.setEmail("rem@gmail.com");
-        given(userDAO.findById(anyLong())).willReturn(Optional.of(user));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         // when
         underTest.getUserById(user.getId());
         // then
-        verify(userDAO).findById(eq(user.getId()));
+        verify(userRepository).findById(eq(user.getId()));
     }
 
     @Test
@@ -53,7 +53,7 @@ class UserServiceImplTest {
         // when
         User userByEmail = underTest.getUserByEmail(email);
         // then
-        verify(userDAO).findByEmail(eq(email));
+        verify(userRepository).findByEmail(eq(email));
     }
 
     @Test
@@ -65,7 +65,7 @@ class UserServiceImplTest {
         // when
         List<User> usersByName = underTest.getUsersByName(name, pageSize, pageNum);
         // then
-        verify(userDAO).findByNameContaining(eq(name));
+        verify(userRepository).findByNameContaining(eq(name));
     }
 
     @Test
@@ -77,7 +77,7 @@ class UserServiceImplTest {
         // when
         underTest.createUser(user);
         // then
-        verify(userDAO).save(user);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -86,12 +86,12 @@ class UserServiceImplTest {
         User user = new User();
         user.setName("Rem");
         user.setEmail("rem@gmail.com");
-        given(userDAO.findByEmail(anyString())).willReturn(user);
+        given(userRepository.findByEmail(anyString())).willReturn(user);
         // when then
         assertThatThrownBy(() -> underTest.createUser(user))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(String.format("Email %s already exists", user.getEmail()));
-        verify(userDAO, never()).save(user);
+        verify(userRepository, never()).save(user);
     }
 
     @Test
@@ -101,11 +101,11 @@ class UserServiceImplTest {
         user.setId(1L);
         user.setName("Rem");
         user.setEmail("rem@gmail.com");
-        given(userDAO.findById(anyLong())).willReturn(Optional.of(user));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
         // when
         underTest.updateUser(user);
         // then
-        verify(userDAO).save(user);
+        verify(userRepository).save(user);
     }
 
     @Test
@@ -115,35 +115,35 @@ class UserServiceImplTest {
         user.setId(1L);
         user.setName("Rem");
         user.setEmail("rem@gmail.com");
-        given(userDAO.findById(anyLong())).willReturn(null);
+        given(userRepository.findById(anyLong())).willReturn(null);
         // when then
         assertThatThrownBy(() -> underTest.updateUser(user))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(String.format("User with id=%s does not exist", user.getId()));
-        verify(userDAO, never()).save(user);
+        verify(userRepository, never()).save(user);
     }
 
     @Test
     void deleteUser() {
         // given
         final Long userId = 1L;
-        given(userDAO.findById(anyLong())).willReturn(Optional.of(new User()));
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(new User()));
         // when
         underTest.deleteUser(userId);
         // then
-        verify(userDAO).deleteById(userId);
+        verify(userRepository).deleteById(userId);
     }
 
     @Test
     void deleteUserWillThrowWhenIdNotExists() {
         // given
         final Long userId = Long.MAX_VALUE;
-        given(userDAO.findById(anyLong())).willReturn(null);
+        given(userRepository.findById(anyLong())).willReturn(null);
         // when
         assertThatThrownBy(() -> underTest.deleteUser(userId))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(String.format("User with id=%s does not exist", userId));
         // then
-        verify(userDAO, never()).deleteById(userId);
+        verify(userRepository, never()).deleteById(userId);
     }
 }

@@ -10,17 +10,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -47,17 +43,11 @@ public class Ticket {
     @XmlAttribute
     private Integer place;
     @NonNull
+    @Enumerated(EnumType.STRING)
     @XmlAttribute
     private Category category;
 
     public enum Category {STANDARD, PREMIUM, BAR;}
-    //    @ManyToOne
-//    @JoinColumn(name="event_id", referencedColumnName = "id")
-//    public Event event;
-//    @ManyToOne
-//    @JoinColumn(name="user_id", referencedColumnName = "id")
-//    public User user;
-
 
     public Ticket(Long eventId, Long userId, Integer place, Category category) {
         this.eventId = eventId;

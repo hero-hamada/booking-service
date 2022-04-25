@@ -1,6 +1,6 @@
 package com.epam.bookingservice.service.impl;
 
-import com.epam.bookingservice.dao.UserDAO;
+import com.epam.bookingservice.data.UserRepository;
 import com.epam.bookingservice.model.User;
 import com.epam.bookingservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,29 +11,29 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserDAO userDAO;
+    private UserRepository userRepository;
 
     private UserServiceImpl() {
     }
 
     @Autowired
-    public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public User getUserById(Long userId) {
-        return userDAO.findById(userId).get();
+        return userRepository.findById(userId).get();
     }
 
     @Override
     public User getUserByEmail(String email) {
-        return userDAO.findByEmail(email);
+        return userRepository.findByEmail(email);
     }
 
     @Override
     public List<User> getUsersByName(String name, int pageSize, int pageNum) {
-        return userDAO.findByNameContaining(name).stream().limit(pageSize * pageNum).toList();
+        return userRepository.findByNameContaining(name).stream().limit(pageSize * pageNum).toList();
     }
 
     @Override
@@ -41,23 +41,23 @@ public class UserServiceImpl implements UserService {
         if (getUserByEmail(user.getEmail()) != null) {
             throw new IllegalStateException(String.format("Email %s already exists", user.getEmail()));
         }
-        return userDAO.save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public User updateUser(User user) {
-        if (userDAO.findById(user.getId()) == null) {
+        if (userRepository.findById(user.getId()) == null) {
             throw new IllegalStateException(String.format("User with id=%s does not exist", user.getId()));
         }
-        return userDAO.save(user);
+        return userRepository.save(user);
     }
 
     @Override
     public boolean deleteUser(Long userId) {
-        if (userDAO.findById(userId) == null) {
+        if (userRepository.findById(userId) == null) {
             throw new IllegalStateException(String.format("User with id=%s does not exist", userId));
         }
-        userDAO.deleteById(userId);
-        return !userDAO.existsById(userId);
+        userRepository.deleteById(userId);
+        return !userRepository.existsById(userId);
     }
 }

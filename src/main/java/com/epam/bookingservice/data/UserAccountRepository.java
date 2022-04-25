@@ -1,11 +1,10 @@
-package com.epam.bookingservice.dao;
+package com.epam.bookingservice.data;
 
 import com.epam.bookingservice.model.UserAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserAccountDAO extends JpaRepository<UserAccount, Long> {
+public interface UserAccountRepository extends JpaRepository<UserAccount, Long> {
     UserAccount findFirstByUserId(Long userId);
 }

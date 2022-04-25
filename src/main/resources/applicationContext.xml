@@ -10,15 +10,15 @@
     <context:annotation-config/>
 
 <!--    <bean id="dataStorage"-->
-<!--          class="com.epam.bookingservice.dao.storage.DataStorage">-->
+<!--          class="com.epam.bookingservice.data.storage.DataStorage">-->
 <!--    </bean>-->
 
 <!--    <bean id="userDAO"-->
-<!--          class="com.epam.bookingservice.dao.impl.UserDAOImpl">-->
+<!--          class="com.epam.bookingservice.data.impl.UserDAOImpl">-->
 <!--    </bean>-->
 
-<!--    <bean id="ticketDAO"-->
-<!--          class="com.epam.bookingservice.dao.impl.TicketDAOImpl">-->
+<!--    <bean id="ticketRepository"-->
+<!--          class="com.epam.bookingservice.data.impl.TicketDAOImpl">-->
 <!--    </bean>-->
 
 <!--    <bean id="userService"-->

@@ -1,9 +1,9 @@
-package com.epam.bookingservice.dao.impl;
+package com.epam.bookingservice.data.impl;
 
-import com.epam.bookingservice.dao.EventDAO;
-import com.epam.bookingservice.dao.TicketDAO;
-import com.epam.bookingservice.dao.UserAccountDAO;
-import com.epam.bookingservice.dao.UserDAO;
+import com.epam.bookingservice.data.EventRepository;
+import com.epam.bookingservice.data.TicketRepository;
+import com.epam.bookingservice.data.UserAccountRepository;
+import com.epam.bookingservice.data.UserRepository;
 import com.epam.bookingservice.model.Event;
 import com.epam.bookingservice.model.Ticket;
 import com.epam.bookingservice.model.User;
@@ -26,16 +26,16 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @DataJpaTest
 @ExtendWith(MockitoExtension.class)
-class TicketDAOTest {
+class TicketRepositoryTest {
 
     @Autowired
-    private TicketDAO underTest;
+    private TicketRepository underTest;
     @Autowired
-    private UserDAO userDAO;
+    private UserRepository userRepository;
     @Autowired
-    private EventDAO eventDAO;
+    private EventRepository eventDAO;
     @Autowired
-    private UserAccountDAO userAccountDAO;
+    private UserAccountRepository userAccountRepository;
 
     private List<Ticket> expectedTickets;
     private User savedUser;
@@ -44,7 +44,7 @@ class TicketDAOTest {
     @BeforeEach
     public void setUp() {
         underTest.deleteAll();
-        userDAO.deleteAll();
+        userRepository.deleteAll();
         eventDAO.deleteAll();
 
         final User user = new User();
@@ -53,13 +53,13 @@ class TicketDAOTest {
         UserAccount userAccount = new UserAccount();
         userAccount.setMoney(BigDecimal.valueOf(5000));
         user.setAccount(userAccount);
-        savedUser = userDAO.save(user);
+        savedUser = userRepository.save(user);
         final Event event = new Event();
         event.setTitle("Event");
         event.setDate(LocalDate.of(2022, MAY, 30));
         event.setTicketPrice(BigDecimal.valueOf(1000));
         savedEvent = eventDAO.save(event);
-        userAccountDAO.save(userAccount);
+        userAccountRepository.save(userAccount);
 
         expectedTickets = underTest.saveAll(List.of(
                 new Ticket(savedEvent.getId(), savedUser.getId(), 1, STANDARD),

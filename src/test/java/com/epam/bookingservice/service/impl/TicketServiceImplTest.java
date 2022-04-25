@@ -1,8 +1,8 @@
 package com.epam.bookingservice.service.impl;
 
-import com.epam.bookingservice.dao.EventDAO;
-import com.epam.bookingservice.dao.TicketDAO;
-import com.epam.bookingservice.dao.UserAccountDAO;
+import com.epam.bookingservice.data.EventRepository;
+import com.epam.bookingservice.data.TicketRepository;
+import com.epam.bookingservice.data.UserAccountRepository;
 import com.epam.bookingservice.model.Event;
 import com.epam.bookingservice.model.Ticket;
 import com.epam.bookingservice.model.User;
@@ -35,11 +35,11 @@ import static org.mockito.Mockito.verify;
 class TicketServiceImplTest {
 
     @Mock
-    private TicketDAO ticketDAO;
+    private TicketRepository ticketRepository;
     @Mock
-    private UserAccountDAO userAccountDAO;
+    private UserAccountRepository userAccountRepository;
     @Mock
-    private EventDAO eventDAO;
+    private EventRepository eventRepository;
     @Mock
     private UserAccountService userAccountService;
     @Mock
@@ -48,9 +48,9 @@ class TicketServiceImplTest {
 
     @BeforeEach
     public void setUp() {
-        eventService = new EventServiceImpl(eventDAO);
-        userAccountService = new UserAccountServiceImpl(userAccountDAO);
-        underTest = new TicketServiceImpl(ticketDAO, userAccountService, eventService);
+        eventService = new EventServiceImpl(eventRepository);
+        userAccountService = new UserAccountServiceImpl(userAccountRepository);
+        underTest = new TicketServiceImpl(ticketRepository, userAccountService, eventService);
     }
 
     @Test
@@ -81,17 +81,17 @@ class TicketServiceImplTest {
         expectedTicket.setCategory(category);
         expectedTicket.setPlace(place);
 
-        given(eventDAO.findById(event.getId())).willReturn(Optional.of(event));
-        given(userAccountDAO.findFirstByUserId(user.getId())).willReturn(userAccount);
-        given(userAccountDAO.findById(userAccount.getId())).willReturn(Optional.of(userAccount));
+        given(eventRepository.findById(event.getId())).willReturn(Optional.of(event));
+        given(userAccountRepository.findFirstByUserId(user.getId())).willReturn(userAccount);
+        given(userAccountRepository.findById(userAccount.getId())).willReturn(Optional.of(userAccount));
 
         // when
         underTest.createTicket(user.getId(), event.getId(), place, category);
 
         // then
         userAccount.setMoney(userAccount.getMoney().subtract(event.getTicketPrice()));
-        verify(userAccountDAO).save(userAccount);
-        verify(ticketDAO).save(eq(expectedTicket));
+        verify(userAccountRepository).save(userAccount);
+        verify(ticketRepository).save(eq(expectedTicket));
     }
 
     @Test
@@ -122,8 +122,8 @@ class TicketServiceImplTest {
         expectedTicket.setCategory(category);
         expectedTicket.setPlace(place);
 
-        given(eventDAO.findById(event.getId())).willReturn(Optional.of(event));
-        given(userAccountDAO.findFirstByUserId(user.getId())).willReturn(userAccount);
+        given(eventRepository.findById(event.getId())).willReturn(Optional.of(event));
+        given(userAccountRepository.findFirstByUserId(user.getId())).willReturn(userAccount);
 
         // when then
         assertThatThrownBy(() -> underTest.createTicket(user.getId(), event.getId(), place, category))
@@ -131,8 +131,8 @@ class TicketServiceImplTest {
                 .hasMessageContaining(
                         String.format("Not enough money to buy ticket with price: %s", event.getTicketPrice())
                 );
-        verify(userAccountDAO, never()).save(userAccount);
-        verify(ticketDAO, never()).save(any());
+        verify(userAccountRepository, never()).save(userAccount);
+        verify(ticketRepository, never()).save(any());
     }
 
     @Test
@@ -149,7 +149,7 @@ class TicketServiceImplTest {
         List<Ticket> actualBookedTickets = underTest.getBookedTickets(user, pageSize, pageNum);
 
         // then
-        verify(ticketDAO).findAllByUserId(eq(user.getId()));
+        verify(ticketRepository).findAllByUserId(eq(user.getId()));
     }
 
     @Test
@@ -164,7 +164,7 @@ class TicketServiceImplTest {
         // when
         List<Ticket> actualBookedTickets = underTest.getBookedTickets(event, pageSize, pageNum);
         // then
-        verify(ticketDAO).findAllByEventId(event.getId());
+        verify(ticketRepository).findAllByEventId(event.getId());
     }
 
     @Test
@@ -174,6 +174,6 @@ class TicketServiceImplTest {
         // when
         underTest.deleteTicket(id);
         // then
-        verify(ticketDAO).deleteById(id);
+        verify(ticketRepository).deleteById(id);
     }
 }

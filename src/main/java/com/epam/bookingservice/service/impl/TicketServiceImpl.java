@@ -1,6 +1,6 @@
 package com.epam.bookingservice.service.impl;
 
-import com.epam.bookingservice.dao.TicketDAO;
+import com.epam.bookingservice.data.TicketRepository;
 import com.epam.bookingservice.model.Event;
 import com.epam.bookingservice.model.Ticket;
 import com.epam.bookingservice.model.User;
@@ -17,15 +17,15 @@ import java.util.List;
 @Service
 public class TicketServiceImpl implements TicketService {
 
-    private TicketDAO ticketDAO;
+    private TicketRepository ticketRepository;
     private UserAccountService userAccountService;
     private EventService eventService;
 
     @Autowired
-    public TicketServiceImpl(TicketDAO ticketDAO,
+    public TicketServiceImpl(TicketRepository ticketRepository,
                              UserAccountService userAccountService,
                              EventService eventService) {
-        this.ticketDAO = ticketDAO;
+        this.ticketRepository = ticketRepository;
         this.userAccountService = userAccountService;
         this.eventService = eventService;
     }
@@ -40,7 +40,7 @@ public class TicketServiceImpl implements TicketService {
 
         withdrawMoneyFromUserAccount(eventId, userId);
 
-        return ticketDAO.save(ticket);
+        return ticketRepository.save(ticket);
     }
 
     private void withdrawMoneyFromUserAccount(long eventId, long userId) {
@@ -64,7 +64,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(User user, int pageSize, int pageNum) {
-        List<Ticket> allTicketsByUserId = ticketDAO.findAllByUserId(user.getId());
+        List<Ticket> allTicketsByUserId = ticketRepository.findAllByUserId(user.getId());
         return allTicketsByUserId.stream()
                 .limit(pageSize * pageNum)
                 .toList();
@@ -72,7 +72,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<Ticket> getBookedTickets(Event event, int pageSize, int pageNum) {
-        List<Ticket> allTicketsByEventId = ticketDAO.findAllByEventId(event.getId());
+        List<Ticket> allTicketsByEventId = ticketRepository.findAllByEventId(event.getId());
         return allTicketsByEventId.stream()
                 .limit(pageSize * pageNum)
                 .toList();
@@ -80,8 +80,8 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public boolean deleteTicket(long ticketId) {
-        ticketDAO.deleteById(ticketId);
-        return !ticketDAO.existsById(ticketId);
+        ticketRepository.deleteById(ticketId);
+        return !ticketRepository.existsById(ticketId);
     }
 }
 

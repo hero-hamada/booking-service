@@ -1,6 +1,6 @@
 package com.epam.bookingservice.service.impl;
 
-import com.epam.bookingservice.dao.EventDAO;
+import com.epam.bookingservice.data.EventRepository;
 import com.epam.bookingservice.model.Event;
 import com.epam.bookingservice.service.EventService;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,23 +27,23 @@ import static org.mockito.Mockito.when;
 class EventServiceImplTest {
 
     @Mock
-    private EventDAO eventDAO;
+    private EventRepository eventRepository;
     private EventService underTest;
 
     @BeforeEach
     public void setUp() {
-        underTest = new EventServiceImpl(eventDAO);
+        underTest = new EventServiceImpl(eventRepository);
     }
 
     @Test
     void getEventById() {
         // given
         final Long eventId = 1L;
-        when(eventDAO.findById(eventId)).thenReturn(Optional.of(new Event()));
+        when(eventRepository.findById(eventId)).thenReturn(Optional.of(new Event()));
         // when
         underTest.getEventById(eventId);
         // then
-        verify(eventDAO).findById(eq(eventId));
+        verify(eventRepository).findById(eq(eventId));
     }
 
     @Test
@@ -55,7 +55,7 @@ class EventServiceImplTest {
         // when
         List<Event> eventsByTitle = underTest.getEventsByTitle(title, pageSize, pageNum);
         // then
-        verify(eventDAO).findByTitleContaining(eq(title));
+        verify(eventRepository).findByTitleContaining(eq(title));
     }
 
     @Test
@@ -67,7 +67,7 @@ class EventServiceImplTest {
         // when
         List<Event> eventsForDay = underTest.getEventsForDay(day, pageSize, pageNum);
         // then
-        verify(eventDAO).findByDay(eq(day));
+        verify(eventRepository).findByDay(eq(day));
     }
 
     @Test
@@ -80,7 +80,7 @@ class EventServiceImplTest {
         // when
         underTest.createEvent(expectedEvent);
         // then
-        verify(eventDAO).save(eq(expectedEvent));
+        verify(eventRepository).save(eq(expectedEvent));
     }
 
     @Test
@@ -92,11 +92,11 @@ class EventServiceImplTest {
         expectedEvent.setDate(LocalDate.of(2050, MAY, 20));
         expectedEvent.setTicketPrice(BigDecimal.valueOf(100));
 
-        when(eventDAO.findById(anyLong())).thenReturn(Optional.of(expectedEvent));
+        when(eventRepository.findById(anyLong())).thenReturn(Optional.of(expectedEvent));
         // when
         underTest.updateEvent(expectedEvent);
         // then
-        verify(eventDAO).save(eq(expectedEvent));
+        verify(eventRepository).save(eq(expectedEvent));
     }
 
     @Test
@@ -107,13 +107,13 @@ class EventServiceImplTest {
         expectedEvent.setDate(LocalDate.of(2050, MAY, 10));
         expectedEvent.setTicketPrice(BigDecimal.valueOf(100));
 
-        when(eventDAO.findById(expectedEvent.getId())).thenReturn(null);
+        when(eventRepository.findById(expectedEvent.getId())).thenReturn(null);
         // when
         assertThatThrownBy(() -> underTest.updateEvent(expectedEvent))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(String.format("Event with id=%s does not exist", expectedEvent.getId()));
         // then
-        verify(eventDAO, never()).save(eq(expectedEvent));
+        verify(eventRepository, never()).save(eq(expectedEvent));
     }
 
     @Test
@@ -123,6 +123,6 @@ class EventServiceImplTest {
         // when
         underTest.deleteEvent(eventId);
         // then
-        verify(eventDAO).deleteById(eq(eventId));
+        verify(eventRepository).deleteById(eq(eventId));
     }
 }
