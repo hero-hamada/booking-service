@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,12 +35,14 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public Event getById(@PathVariable("id") Long id) {
         LOGGER.info("GET Event by id: {}", id);
         return bookingFacade.getEventById(id);
     }
 
     @GetMapping(params = {"title", "pageSize", "pageNum"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<Event> getEventsByTitle(@RequestParam(name = "title") String title,
                                         @RequestParam("pageSize") int pageSize,
                                         @RequestParam("pageNum") int pageNum) {
@@ -48,6 +51,7 @@ public class EventController {
     }
 
     @GetMapping(params = {"day", "pageSize", "pageNum"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
     public List<Event> getEventsForDay(@RequestParam(name = "day")
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate day,
                                        @RequestParam("pageSize") int pageSize,
@@ -57,6 +61,7 @@ public class EventController {
     }
 
     @PostMapping()
+    @PreAuthorize("hasAuthority('event:write')")
     @ResponseStatus(HttpStatus.CREATED)
     public Event createEvent(@RequestBody Event event) {
         Event newEvent = bookingFacade.createEvent(event);
@@ -65,12 +70,14 @@ public class EventController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('event:write')")
     public Event updateEvent(@RequestBody Event event) {
         LOGGER.info("UPDATE Event: {}", event);
         return bookingFacade.updateEvent(event);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('event:write')")
     public void deleteById(@PathVariable("id") Long id) {
         bookingFacade.deleteEvent(id);
         LOGGER.info("DELETE Event with id: {}", id);
