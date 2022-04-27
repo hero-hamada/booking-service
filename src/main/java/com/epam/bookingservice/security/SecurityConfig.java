@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.epam.bookingservice.security.ApplicationUserRole.ADMIN;
 import static com.epam.bookingservice.security.ApplicationUserRole.ADMINTRAINEE;
@@ -32,14 +33,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+//
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
-//                .antMatchers("/bookingservice/**").hasRole(USER.name())
-//                .antMatchers(HttpMethod.DELETE, "/bookingservice/**").hasAuthority(EVENT_WRITE.getPermission())
-//                .antMatchers(HttpMethod.POST, "/bookingservice/**").hasAuthority(EVENT_WRITE.getPermission())
-//                .antMatchers(HttpMethod.PUT, "/bookingservice/**").hasAuthority(EVENT_WRITE.getPermission())
-//                .antMatchers(HttpMethod.GET, "/bookingservice/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+                .antMatchers("/bookingservice/**").hasAnyRole(USER.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -53,19 +53,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .username("senku")
                 .password(passwordEncoder.encode("password"))
                 .authorities(USER.getGrantedAuthorities())
-//                .roles(USER.name())
                 .build();
         UserDetails admin = User.builder()
                 .username("linda")
                 .password(passwordEncoder.encode("password"))
                 .authorities(ADMIN.getGrantedAuthorities())
-//                .roles(ADMIN.name())
                 .build();
         UserDetails admintrainee = User.builder()
                 .username("admintrainee")
                 .password(passwordEncoder.encode("password"))
                 .authorities(ADMINTRAINEE.getGrantedAuthorities())
-//                .roles(ADMINTRAINEE.name())
                 .build();
 
         return new InMemoryUserDetailsManager(user, admin, admintrainee);
