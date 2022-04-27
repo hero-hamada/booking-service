@@ -13,7 +13,7 @@ import java.io.InputStream;
 
 public class JAXBXMLHandler {
 
-    private static final String TICKETS_XML = "tickets.xml";
+    private static final String TICKETS_XML = "static/tickets.xml";
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class.getName());
 
     public static Tickets unmarshall() throws JAXBException {

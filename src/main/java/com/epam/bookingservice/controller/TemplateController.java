@@ -2,11 +2,14 @@ package com.epam.bookingservice.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-public class AuthenticationController {
+@RequestMapping("/")
+public class TemplateController {
+
     @GetMapping("/login")
     public String getLogin() {
-        return "WEB-INF/templates/login";
+        return "login";
     }
 }
