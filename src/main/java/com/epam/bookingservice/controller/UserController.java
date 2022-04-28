@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public User getById(@PathVariable("id") Long id) {
         User userById = bookingFacade.getUserById(id);
         LOGGER.info("GET User by id: {}");
@@ -40,12 +42,14 @@ public class UserController {
     }
 
     @GetMapping(params = {"email"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public User getByEmail(@RequestParam("email") String email) {
         LOGGER.info("GET User by email: {}", email);
         return bookingFacade.getUserByEmail(email);
     }
 
     @GetMapping(params = {"name", "pageSize", "pageNum"})
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<User> getUsersByName(@RequestParam("name") String name,
                                      @RequestParam("pageSize") int pageSize,
                                      @RequestParam("pageNum") int pageNum) {
@@ -55,6 +59,7 @@ public class UserController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAuthority('user:write')")
     public User createUser(@RequestBody User user) {
         User newUser = bookingFacade.createUser(user);
         LOGGER.info("CREATE User: " + newUser);
@@ -62,12 +67,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
     public User updateUser(@RequestBody User user) {
         LOGGER.info("UPDATE User : {}", user);
         return bookingFacade.updateUser(user);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('user:write')")
     public void deleteById(@PathVariable("id") Long id) {
         bookingFacade.deleteUser(id);
         LOGGER.info("DELETE User with id: {}", id);

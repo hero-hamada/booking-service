@@ -12,4 +12,8 @@ public class PasswordConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
+
+    public static void main(String[] args) {
+        System.out.println(new BCryptPasswordEncoder(10).encode("password"));
+    }
 }
