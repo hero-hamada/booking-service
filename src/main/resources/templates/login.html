@@ -8,8 +8,13 @@
     <form th:action="@{/login}" method="post">
         <div>
             <label>Username: <input type="text" name="username"/></label>
+            <br>
             <label>Password: <input type="password" name="password"/></label>
         </div>
+        <br>
+
+        <label>Remember me: <input type="checkbox" name="remember-me"/></label>
+
         <div>
             <input type="submit" value="Login"/>
         </div>
