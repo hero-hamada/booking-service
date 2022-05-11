@@ -22,7 +22,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "account", schema = "public")
+@Table(name = "account")
 public class UserAccount {
 
     @Id

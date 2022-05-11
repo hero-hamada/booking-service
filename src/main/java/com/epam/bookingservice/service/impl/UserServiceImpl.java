@@ -4,6 +4,7 @@ import com.epam.bookingservice.data.UserRepository;
 import com.epam.bookingservice.model.User;
 import com.epam.bookingservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,13 +13,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
-
-    private UserServiceImpl() {
-    }
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
         if (getUserByEmail(user.getEmail()) != null) {
             throw new IllegalStateException(String.format("Email %s already exists", user.getEmail()));
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 

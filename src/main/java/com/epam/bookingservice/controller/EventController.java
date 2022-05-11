@@ -35,14 +35,12 @@ public class EventController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public Event getById(@PathVariable("id") Long id) {
         LOGGER.info("GET Event by id: {}", id);
         return bookingFacade.getEventById(id);
     }
 
     @GetMapping(params = {"title", "pageSize", "pageNum"})
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<Event> getEventsByTitle(@RequestParam(name = "title") String title,
                                         @RequestParam("pageSize") int pageSize,
                                         @RequestParam("pageNum") int pageNum) {
@@ -51,7 +49,6 @@ public class EventController {
     }
 
     @GetMapping(params = {"day", "pageSize", "pageNum"})
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_ADMINTRAINEE')")
     public List<Event> getEventsForDay(@RequestParam(name = "day")
                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)  LocalDate day,
                                        @RequestParam("pageSize") int pageSize,

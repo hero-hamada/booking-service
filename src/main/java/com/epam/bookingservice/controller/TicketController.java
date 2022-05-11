@@ -32,7 +32,6 @@ public class TicketController {
     }
 
     @GetMapping(params = {"userId", "pageSize", "pageNum"})
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<Ticket> getBookedTicketsByUserId(@RequestParam("userId") Long userId,
                                                  @RequestParam("pageSize") int pageSize,
                                                  @RequestParam("pageNum") int pageNum) {
@@ -45,7 +44,6 @@ public class TicketController {
     }
 
     @GetMapping(params = {"eventId", "pageSize", "pageNum"})
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<Ticket> getBookedTicketsByEventId(@RequestParam("eventId") Long eventId,
                                                   @RequestParam("pageSize") int pageSize,
                                                   @RequestParam("pageNum") int pageNum) {
@@ -59,7 +57,6 @@ public class TicketController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('ticket:write')")
     public Ticket createTicket(@RequestBody Ticket ticket) {
         Ticket newTicket = bookingFacade.bookTicket(ticket.getUserId(),
                 ticket.getEventId(),
@@ -70,7 +67,6 @@ public class TicketController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('ticket:write')")
     public void deleteById(@PathVariable("id") Long id) {
         boolean isDeletedSuccess = bookingFacade.cancelTicket(id);
         LOGGER.info("DELETE Ticket with id: {}", id);

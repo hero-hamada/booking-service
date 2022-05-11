@@ -13,4 +13,9 @@ public class TemplateController {
         return "login";
     }
 
+    @GetMapping("register")
+    public String register() {
+        return "users/add";
+    }
+
 }

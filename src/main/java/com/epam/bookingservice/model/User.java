@@ -1,6 +1,5 @@
 package com.epam.bookingservice.model;
 
-import com.epam.bookingservice.security.ApplicationUserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +9,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,13 +18,11 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDate;
 
-import static com.epam.bookingservice.security.ApplicationUserRole.USER;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "`user`", schema = "public")
+@Table(name = "`user`")
 public class User {
 
     @Id
@@ -35,9 +30,10 @@ public class User {
     @Column(name = "id")
     private Long id;
     @NonNull
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String name;
     @NonNull
+    @Column(unique = true)
     private String email;
     private String password;
     @NonNull

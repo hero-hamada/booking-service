@@ -56,5 +56,3 @@ public class Ticket {
         this.place = place;
     }
 }
-
-

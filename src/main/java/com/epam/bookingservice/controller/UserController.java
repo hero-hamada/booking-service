@@ -34,7 +34,6 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public User getById(@PathVariable("id") Long id) {
         User userById = bookingFacade.getUserById(id);
         LOGGER.info("GET User by id: {}");
@@ -42,14 +41,12 @@ public class UserController {
     }
 
     @GetMapping(params = {"email"})
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public User getByEmail(@RequestParam("email") String email) {
         LOGGER.info("GET User by email: {}", email);
         return bookingFacade.getUserByEmail(email);
     }
 
     @GetMapping(params = {"name", "pageSize", "pageNum"})
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public List<User> getUsersByName(@RequestParam("name") String name,
                                      @RequestParam("pageSize") int pageSize,
                                      @RequestParam("pageNum") int pageNum) {
@@ -57,9 +54,8 @@ public class UserController {
         return bookingFacade.getUsersByName(name, pageSize, pageNum);
     }
 
-    @PostMapping()
+    @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAuthority('user:write')")
     public User createUser(@RequestBody User user) {
         User newUser = bookingFacade.createUser(user);
         LOGGER.info("CREATE User: " + newUser);

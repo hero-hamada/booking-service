@@ -25,7 +25,6 @@ public class PdfBookedTicketsController {
     }
 
     @GetMapping("/accept=application/pdf")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN, ROLE_ADMINTRAINEE')")
     public void getBookedTickets(@RequestParam("userId") Long userId,
                                    @RequestParam("pageSize") int pageSize,
                                    @RequestParam("pageNum") int pageNum) {
